@@ -201,6 +201,11 @@
 #include "../usermods/LDR_Dusk_Dawn_v2/usermod_LDR_Dusk_Dawn_v2.h"
 #endif
 
+#ifdef USERMOD_CHROMANCE
+#include "../usermods/chromance/chromance.h"
+#include "../usermods/chromance/chromance.cpp"
+#endif
+
 void registerUsermods()
 {
 /*
@@ -379,5 +384,9 @@ void registerUsermods()
 
   #ifdef USERMOD_LDR_DUSK_DAWN
   usermods.add(new LDR_Dusk_Dawn_v2());
+  #endif
+
+  #ifdef USERMOD_CHROMANCE
+  usermods.add(new ChromanceUserMod());
   #endif
 }
