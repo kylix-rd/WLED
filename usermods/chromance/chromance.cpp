@@ -57,6 +57,9 @@ void ChromanceUserMod::connected() {
 
 void ChromanceUserMod::loop() {
 
+  if (!enabled)
+    return;
+
   // Fade all dots to create trails
   for (int strip = 0; strip < 40; strip++) {
     for (int led = 0; led < 14; led++) {
