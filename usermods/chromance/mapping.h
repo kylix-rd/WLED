@@ -32,7 +32,7 @@ int nodeConnections[25][6] = {
   
   {37, 36, -1, 30,  0, 31}, // {15, 22, 27, 31, 26, 21},
   {35, -1, -1, -1, 36, -1}, // {17, 24, -1, 33, 28, 23},
-  {-1, 20, -1, 14, -1, 21}, // {-1, 26, -1, 30, -1, 25},
+  {-1, 20, -1, 15, -1, 21}, // {-1, 26, -1, 30, -1, 25},
   {-1,  0, -1, 18, -1,  1}, // {-1, 28, -1, 32, -1, 27},
   {14, -1, 13, -1, -1, -1}, // {29, -1, 34, -1, -1, -1},
   
@@ -124,7 +124,7 @@ int ledAssignments[40][3] = {
   {2, tailof(24), headof(24)}, // {1, tailof(1), headof(1)},
   {2, tailof(25), headof(25)}, // {3, tailof(9), headof(9)},
   {2, headof(26), tailof(26)}, // {0, headof(6), tailof(6)},
-  {2, headof(27), tailof(27)}, // {1, tailof(6), headof(6)},
+  {2, tailof(27), headof(27)}, // {1, tailof(6), headof(6)},
   {2, tailof(28), headof(28)}, // {0, tailof(9), headof(9)},
   {2, tailof(29), headof(29)}, // {3, tailof(3), headof(3)},
 
@@ -132,7 +132,7 @@ int ledAssignments[40][3] = {
   {3, tailof(31), headof(31)}, // {3, headof(6), tailof(6)},
   {3, tailof(32), headof(32)}, // {0, tailof(8), headof(8)},
   {3, tailof(33), headof(33)}, // {0, tailof(3), headof(3)},
-  {3, tailof(34), headof(34)}, // {3, tailof(2), headof(2)},
+  {3, headof(34), tailof(34)}, // {3, tailof(2), headof(2)},
   {3, headof(35), tailof(35)}, // {3, headof(7), tailof(7)},
   {3, headof(36), tailof(36)}, // {0, headof(7), tailof(7)},
   {3, tailof(37), headof(37)}, // {0, tailof(2), headof(2)},
