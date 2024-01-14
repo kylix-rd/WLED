@@ -43,7 +43,7 @@ Ripple ripples[numberOfRipples] = {
   Ripple(29),
 };
 
-static const char _data_FX_MODE_CHROMANCE[] PROGMEM = "Chromance@!;!,!;!;01";
+static const char _data_FX_MODE_CHROMANCE[] PROGMEM = "Chromance@;!,!;!;01";
 
 uint16_t chromance_mode(void) {
   return ChromanceUserMod::Get()->mode_chromance();
@@ -57,14 +57,14 @@ ChromanceUserMod::ChromanceUserMod()  {
 
 void ChromanceUserMod::setup() {
   // do your set-up here
-  Serial.println("Hello from my Chromance!");
+  //Serial.println("Hello from my Chromance!");
   strip.addEffect(255, &chromance_mode, _data_FX_MODE_CHROMANCE);
   initDone = true;
 }
 
 
 void ChromanceUserMod::connected() {
-  Serial.println("Connected to WiFi!");
+  //Serial.println("Connected to WiFi!");
 }
 
 
