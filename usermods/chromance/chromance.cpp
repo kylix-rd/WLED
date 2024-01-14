@@ -104,6 +104,7 @@ uint16_t ChromanceUserMod::mode_chromance() {
         ledColors[segment][fromBottom][2]);
     }
   }
+
   auto now = millis();
 
   if (now - lastHeartbeat >= autoPulseTimeout) {
@@ -111,7 +112,7 @@ uint16_t ChromanceUserMod::mode_chromance() {
     if (numberOfAutoPulseTypes && now - lastRandomPulse >= randomPulseTime) {
       unsigned int baseColor = random(0xFFFF);
 
-      if (currentAutoPulseType == 255 || (numberOfAutoPulseTypes > 1 && millis() - lastAutoPulseChange >= autoPulseChangeTime)) {
+      if (currentAutoPulseType == 255 || (numberOfAutoPulseTypes > 1 && now - lastAutoPulseChange >= autoPulseChangeTime)) {
         byte possiblePulse = 255;
         while (true) {
           possiblePulse = random(3);
