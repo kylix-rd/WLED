@@ -20,37 +20,65 @@
  * 2. Register the usermod by adding #include "usermod_filename.h" in the top and registerUsermod(new MyUsermodClass()) in the bottom of usermods_list.cpp
  */
 
+#define heartbeatLockout 500  // Heartbeats that happen within this many milliseconds are ignored
+#define heartbeatDelta 300  // Drop in reflected IR that constitutes a heartbeat
+
+#define randomPulsesEnabled true  // Fire random rainbow pulses from random nodes
+#define cubePulsesEnabled true  // Draw cubes at random nodes
+#define starburstPulsesEnabled true  // Draw starbursts
+#define simulatedBiometricsEnabled false  // Simulate heartbeat and EDA ripples
+
+#define autoPulseTimeout 5000  // If no heartbeat is received in this many ms, begin firing random/simulated pulses
+#define randomPulseTime 2000  // Fire a random pulse every (this many) ms
+#define autoPulseChangeTime 30000
+
+#define simulatedHeartbeatBaseTime 600  // Fire a simulated heartbeat pulse after at least this many ms
+#define simulatedHeartbeatVariance 200  // Add random jitter to simulated heartbeat
+#define simulatedEdaBaseTime 1000  // Same, but for inward EDA pulses
+#define simulatedEdaVariance 10000
+
 //class name. Use something descriptive and leave the ": public Usermod" part :)
 class ChromanceUserMod : public Usermod {
+ private:
+  static ChromanceUserMod* this_mod;
+  // Private class members. You can declare variables and functions only accessible to your usermod here
+  bool enabled = false;
+  bool initDone = false;
+  unsigned long lastTime = 0;
 
-  private:
+  // Segments
+  bool segment_state[40];
 
-    // Private class members. You can declare variables and functions only accessible to your usermod here
-    bool enabled = false;
-    bool initDone = false;
-    unsigned long lastTime = 0;
+  // Simulations/Features
+  bool randomPulses = randomPulsesEnabled;
+  bool cubePulses = cubePulsesEnabled;
+  bool starburstPulses = starburstPulsesEnabled;
+  bool simulatedBiometrics = simulatedBiometricsEnabled;
 
-    // set your config variables to their boot default value (this can also be done in readFromConfig() or a constructor if you prefer)
-    bool testBool = false;
-    unsigned long testULong = 42424242;
-    float testFloat = 42.42;
-    String testString = "Forty-Two";
+  unsigned long lastHeartbeat;  // Track last heartbeat so we can detect noise/disconnections
 
-    // These config variables have defaults set inside readFromConfig()
-    int testInt;
-    long testLong;
-    int8_t testPins[2];
+  unsigned long lastRandomPulse;
+  byte lastAutoPulseNode = 255;
 
-    // string that are used multiple time (this will save some flash memory)
-    static const char _name[];
-    static const char _enabled[];
+  byte numberOfAutoPulseTypes = randomPulsesEnabled + cubePulsesEnabled + starburstPulsesEnabled;
+  byte currentAutoPulseType = 255;
+  unsigned long lastAutoPulseChange;
+
+  unsigned long nextSimulatedHeartbeat = millis();
+  unsigned long nextSimulatedEda = millis();
+
+  // string that are used multiple time (this will save some flash memory)
+  static const char _name[];
+  static const char _enabled[];
 
 
-    // any private methods should go here (non-inline method should be defined out of class)
-    void publishMqtt(const char* state, bool retain = false); // example for publishing MQTT message
+  // any private methods should go here (non-inline method should be defined out of class)
+  void publishMqtt(const char* state, bool retain = false); // example for publishing MQTT message
 
 
   public:
+
+    ChromanceUserMod();
 
     // non WLED related methods, may be used for data exchange between usermods (non-inline methods should be defined out of class)
 
@@ -87,13 +115,13 @@ class ChromanceUserMod : public Usermod {
      * readFromConfig() is called prior to setup()
      * You can use it to initialize variables, sensors or similar.
      */
-    void setup();
+    void setup() override;
 
     /*
      * connected() is called every time the WiFi is (re)connected
      * Use it to initialize network interfaces
      */
-    void connected();
+    void connected() override;
 
 
     /*
@@ -106,29 +134,30 @@ class ChromanceUserMod : public Usermod {
      * 2. Try to avoid using the delay() function. NEVER use delays longer than 10 milliseconds.
      *    Instead, use a timer check as shown here.
      */
-    void loop();
+    void loop() override;
 
+    uint16_t mode_chromance();
 
     /*
      * addToJsonInfo() can be used to add custom entries to the /json/info part of the JSON API.
      * Creating an "u" object allows you to add custom key/value pairs to the Info section of the WLED web UI.
      * Below it is shown how this could be used for e.g. a light sensor
      */
-    void addToJsonInfo(JsonObject& root);
+    void addToJsonInfo(JsonObject& root) override;
 
 
     /*
      * addToJsonState() can be used to add custom entries to the /json/state part of the JSON API (state object).
      * Values in the state object may be modified by connected clients
      */
-    void addToJsonState(JsonObject& root);
+    void addToJsonState(JsonObject& root) override;
 
 
     /*
      * readFromJsonState() can be used to receive data clients send to the /json/state part of the JSON API (state object).
      * Values in the state object may be modified by connected clients
      */
-    void readFromJsonState(JsonObject& root);
+    void readFromJsonState(JsonObject& root) override;
 
 
     /*
@@ -166,7 +195,7 @@ class ChromanceUserMod : public Usermod {
      * 
      * I highly recommend checking out the basics of ArduinoJson serialization and deserialization in order to use custom settings!
      */
-    void addToConfig(JsonObject& root);
+    void addToConfig(JsonObject& root) override;
 
 
     /*
@@ -184,7 +213,7 @@ class ChromanceUserMod : public Usermod {
      * 
      * This function is guaranteed to be called on boot, but could also be called every time settings are updated
      */
-    bool readFromConfig(JsonObject& root);
+    bool readFromConfig(JsonObject& root) override;
 
 
     /*
@@ -192,7 +221,7 @@ class ChromanceUserMod : public Usermod {
      * it may add additional metadata for certain entry fields (adding drop down is possible)
      * be careful not to add too much as oappend() buffer is limited to 3k
      */
-    void appendConfigData();
+    void appendConfigData() override;
 
 
     /*
@@ -200,7 +229,7 @@ class ChromanceUserMod : public Usermod {
      * Use this to blank out some LEDs or set them to a different color regardless of the set effect mode.
      * Commonly used for custom clocks (Cronixie, 7 segment)
      */
-    void handleOverlayDraw();
+    void handleOverlayDraw() override;
 
 
     /**
@@ -208,7 +237,7 @@ class ChromanceUserMod : public Usermod {
      * will prevent button working in a default way.
      * Replicating button.cpp
      */
-    bool handleButton(uint8_t b);
+    bool handleButton(uint8_t b) override;
   
 
 #ifndef WLED_DISABLE_MQTT
@@ -216,12 +245,12 @@ class ChromanceUserMod : public Usermod {
      * handling of MQTT message
      * topic only contains stripped topic (part after /wled/MAC)
      */
-    bool onMqttMessage(char* topic, char* payload);
+    bool onMqttMessage(char* topic, char* payload) override;
 
     /**
      * onMqttConnect() is called when MQTT connection is established
      */
-    void onMqttConnect(bool sessionPresent);
+    void onMqttConnect(bool sessionPresent) override;
 #endif
 
 
@@ -229,15 +258,16 @@ class ChromanceUserMod : public Usermod {
      * onStateChanged() is used to detect WLED state change
      * @mode parameter is CALL_MODE_... parameter used for notifications
      */
-    void onStateChange(uint8_t mode);
+    void onStateChange(uint8_t mode) override;
 
 
     /*
      * getId() allows you to optionally give your V2 usermod an unique ID (please define it in const.h!).
      * This could be used in the future for the system to determine whether your usermod is installed.
      */
-    uint16_t getId();
+    uint16_t getId() override;
 
    //More methods can be added in the future, this example will then be extended.
    //Your usermod will remain compatible as it does not need to implement all methods from the Usermod base class!
+  static ChromanceUserMod* Get();
 };
