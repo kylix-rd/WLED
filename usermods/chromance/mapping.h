@@ -62,7 +62,7 @@
 
 // Beam 0 is at 12:00 and advance clockwise
 // -1 means nothing connected on that side
-int nodeConnections[25][6] = {
+const int nodeConnections[25][6] = {
   {-1, 24, 29, 23, -1, -1}, // {-1, -1, 1, -1, 0, -1},
   {-1, -1, 25, -1, 24, -1}, // {-1, -1, 3, -1, 2, -1},
   {-1, -1,  5, -1,  4, -1}, // {-1, -1, 5, -1, 4, -1}, 
@@ -96,7 +96,7 @@ int nodeConnections[25][6] = {
 
 // First member: Node closer to ceiling
 // Second: Node closer to floor
-int segmentConnections[40][2] = {
+const int segmentConnections[40][2] = {
   {15, 18}, // {0, 3},
   {13, 18}, // {0, 4},
   {12, 13}, // {1, 4},
@@ -145,7 +145,7 @@ int segmentConnections[40][2] = {
 // First member: Strip number
 // Second: LED index closer to ceiling
 // Third: LED index closer to floor
-int ledAssignments[40][3] = {
+const int ledAssignments[40][3] = {
   {0, headof(0), tailof(0)}, // {2, headof(3), tailof(3)},
   {0, tailof(1), headof(1)}, // {2, tailof(2), headof(2)},
   {0, tailof(2), headof(2)}, // {1, headof(10), tailof(10)},
@@ -193,15 +193,15 @@ int ledAssignments[40][3] = {
 
 // Border nodes are on the very edge of the network.
 // Ripples fired here don't look very impressive.
-int numberOfBorderNodes = 10;
-int borderNodes[] = {0, 1, 2, 3, 4, 10, 16, 19, 23, 24}; // {0, 1, 2, 3, 6, 10, 13, 19, 21, 24};
+const int numberOfBorderNodes = 10;
+const int borderNodes[] = {0, 1, 2, 3, 4, 10, 16, 19, 23, 24}; // {0, 1, 2, 3, 6, 10, 13, 19, 21, 24};
 
 // Cube nodes link three equiangular segments
 // Firing ripples that always turn in one direction will draw a cube
-int numberOfCubeNodes = 8;
-int cubeNodes[] = {5, 7, 9, 12, 14, 17, 18}; // {7, 8, 9, 11, 12, 17, 18};
+const int numberOfCubeNodes = 8;
+const int cubeNodes[] = {5, 7, 9, 12, 14, 17, 18}; // {7, 8, 9, 11, 12, 17, 18};
 
 // Firing ripples that always turn in one direction will draw a starburst
-int starburstNode = 13; // 15;
+const int starburstNode = 13; // 15;
 
 #endif
