@@ -70,7 +70,11 @@ class ChromanceUserMod : public Usermod {
   // string that are used multiple time (this will save some flash memory)
   static const char _name[];
   static const char _enabled[];
-
+  static const char _randomPulses[];
+  static const char _cubePulses[];
+  static const char _starburstPulses[];
+  static const char _simulatedBiometrics[];
+  static const char _segmentState[];
 
   // any private methods should go here (non-inline method should be defined out of class)
   void publishMqtt(const char* state, bool retain = false); // example for publishing MQTT message

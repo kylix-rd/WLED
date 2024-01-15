@@ -363,13 +363,13 @@ void ChromanceUserMod::addToConfig(JsonObject& root)
   top[FPSTR(_enabled)] = enabled;
 
   //save these vars persistently whenever settings are saved
-  top[F("Random Pulses")] = randomPulses;
-  top[F("Cube Pulses")] = cubePulses;
-  top[F("Starburst Pulses")] = starburstPulses;
-  top[F("Simulated Biometrics")] = simulatedBiometrics;
+  top[FPSTR(_randomPulses)] = randomPulses;
+  top[FPSTR(_cubePulses)] = cubePulses;
+  top[FPSTR(_starburstPulses)] = starburstPulses;
+  top[FPSTR(_simulatedBiometrics)] = simulatedBiometrics;
 
   for (int segment = 0; segment < sizeof(segment_state) / sizeof(bool); ++segment) {
-    top["SegmentState" + String(segment)] = segment_state[segment];
+    top[String(FPSTR(_segmentState)) + String(segment)] = segment_state[segment];
   }
 }
 
@@ -384,13 +384,13 @@ bool ChromanceUserMod::readFromConfig(JsonObject& root)
   bool configComplete = !top.isNull();
 
   configComplete &= getJsonValue(top[FPSTR(_enabled)], enabled, false);
-  configComplete &= getJsonValue(top[F("Random Pulses")], randomPulses, randomPulsesEnabled);
-  configComplete &= getJsonValue(top[F("Cube Pulses")], cubePulses, cubePulsesEnabled);
-  configComplete &= getJsonValue(top[F("Starburst Pulses")], starburstPulses, starburstPulsesEnabled);
-  configComplete &= getJsonValue(top[F("Simulated Biometrics")], simulatedBiometrics, simulatedBiometricsEnabled);
+  configComplete &= getJsonValue(top[FPSTR(_randomPulses)], randomPulses, randomPulsesEnabled);
+  configComplete &= getJsonValue(top[FPSTR(_cubePulses)], cubePulses, cubePulsesEnabled);
+  configComplete &= getJsonValue(top[FPSTR(_starburstPulses)], starburstPulses, starburstPulsesEnabled);
+  configComplete &= getJsonValue(top[FPSTR(_simulatedBiometrics)], simulatedBiometrics, simulatedBiometricsEnabled);
 
   for (int segment = 0; segment < sizeof(segment_state) / sizeof(bool); ++segment) {
-    configComplete &= getJsonValue(top["SegmentState" + String(segment)], segment_state[segment], false);
+    configComplete &= getJsonValue(top[String(FPSTR(_segmentState)) + String(segment)], segment_state[segment], false);
   }
   return configComplete;
 }
@@ -479,7 +479,11 @@ uint16_t ChromanceUserMod::getId()
 // add more strings here to reduce flash memory usage
 const char ChromanceUserMod::_name[]    PROGMEM = "ChromanceUserMod";
 const char ChromanceUserMod::_enabled[] PROGMEM = "enabled";
-
+const char ChromanceUserMod::_randomPulses[] PROGMEM = "Random Pulses";
+const char ChromanceUserMod::_cubePulses[]   PROGMEM = "Cube Pulses";
+const char ChromanceUserMod::_starburstPulses[] PROGMEM = "Starburst Pulses";
+const char ChromanceUserMod::_simulatedBiometrics[] PROGMEM = "Simulated Biometrics";
+const char ChromanceUserMod::_segmentState[] PROGMEM = "SegmentState";
 
 // implementation of non-inline member methods
 
