@@ -314,8 +314,8 @@ uint16_t ChromanceUserMod::mode_chromance() {
 void ChromanceUserMod::addToJsonInfo(JsonObject& root)
 {
     // if "u" object does not exist yet wee need to create it
-    JsonObject user = root["u"];
-    if (user.isNull()) user = root.createNestedObject("u");
+    //JsonObject user = root["u"];
+    //if (user.isNull()) user = root.createNestedObject("u");
 
     //this code adds "u":{"ExampleUsermod":[20," lux"]} to the info object
     //int reading = 20;
@@ -336,8 +336,8 @@ void ChromanceUserMod::addToJsonState(JsonObject& root)
 {
     if (!initDone || !enabled) return;  // prevent crash on boot applyPreset()
 
-    JsonObject usermod = root[FPSTR(_name)];
-    if (usermod.isNull()) usermod = root.createNestedObject(FPSTR(_name));
+    //JsonObject usermod = root[FPSTR(_name)];
+    //if (usermod.isNull()) usermod = root.createNestedObject(FPSTR(_name));
 
     //usermod["user0"] = userVar0;
 }
@@ -347,11 +347,11 @@ void ChromanceUserMod::readFromJsonState(JsonObject& root)
 {
   if (!initDone) return;  // prevent crash on boot applyPreset()
 
-  JsonObject usermod = root[FPSTR(_name)];
-  if (!usermod.isNull()) {
+  //JsonObject usermod = root[FPSTR(_name)];
+  //if (!usermod.isNull()) {
     // expect JSON usermod data in usermod name object: {"ExampleUsermod:{"user0":10}"}
-    userVar0 = usermod["user0"] | userVar0; //if "user0" key exists in JSON, update, else keep old value
-  }
+  //  userVar0 = usermod["user0"] | userVar0; //if "user0" key exists in JSON, update, else keep old value
+  //}
   // you can as well check WLED state JSON keys
   //if (root["bri"] == 255) Serial.println(F("Don't burn down your garage!"));
 }
