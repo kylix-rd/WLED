@@ -173,7 +173,7 @@ const int ledAssignments[40][3] = {
   {2, tailof(22), headof(22)}, // {0, headof(5), tailof(5)},
   {2, tailof(23), headof(23)}, // {0, tailof(4), headof(4)},
   {2, tailof(24), headof(24)}, // {1, tailof(1), headof(1)},
-  {2, tailof(25), headof(25)}, // {3, tailof(9), headof(9)},
+  {2, headof(25), tailof(25)}, // {3, tailof(9), headof(9)},
   {2, headof(26), tailof(26)}, // {0, headof(6), tailof(6)},
   {2, tailof(27), headof(27)}, // {1, tailof(6), headof(6)},
   {2, tailof(28), headof(28)}, // {0, tailof(9), headof(9)},
